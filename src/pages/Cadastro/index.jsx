@@ -1,4 +1,6 @@
+// src/pages/Cadastro/index.jsx
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Cadastro() {
   const [formData, setFormData] = useState({
@@ -7,19 +9,40 @@ export default function Cadastro() {
     password: "",
     confirmPassword: "",
     phone: "",
-    cpf: "",
   });
+  const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      alert("As senhas não conferem.");
+      return;
+    }
 
-    // Aqui você pode integrar com sua API
-    console.log("Dados enviados:", formData);
+    try {
+      const res = await fetch(`${API_URL}/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Erro no cadastro");
+      // Se chegou aqui, cadastro ok
+      navigate("/login");
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
@@ -36,7 +59,9 @@ export default function Cadastro() {
 
         {/* Lado direito com o formulário */}
         <div className="w-full md:w-1/2 p-8">
-          <h2 className="text-3xl font-semibold text-center text-blue-600">Crie sua conta</h2>
+          <h2 className="text-3xl font-semibold text-center text-blue-600">
+            Crie sua conta
+          </h2>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <input
@@ -86,17 +111,6 @@ export default function Cadastro() {
               value={formData.phone}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required
-            />
-
-            <input
-              type="text"
-              name="cpf"
-              placeholder="CPF"
-              value={formData.cpf}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required
             />
 
             <button
@@ -106,15 +120,13 @@ export default function Cadastro() {
               Cadastrar
             </button>
           </form>
-           
+
           <p className="mt-4 text-center text-sm">
-            Já tem uma conta?{' '}
+            Já tem uma conta?{" "}
             <a href="/login" className="text-blue-600 hover:underline">
-              
               Faça login
             </a>
           </p>
-   
         </div>
       </div>
     </div>

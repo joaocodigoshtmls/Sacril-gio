@@ -119,7 +119,7 @@ export default function Configuracoes() {
                 </button>
               </div>
             ))}
-            <button className="bg-blue-500 text-white py-2 px-6 rounded w-fit mt-4">
+            <button className="bg-blue-500 text-black py-2 px-6 rounded w-fit mt-4">
               Salvar alterações
             </button>
           </div>
