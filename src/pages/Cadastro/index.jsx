@@ -11,7 +11,7 @@ export default function Cadastro() {
     phone: "",
   });
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -115,7 +115,7 @@ export default function Cadastro() {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition duration-300"
+              className="w-full bg-blue-600 text-black py-2 rounded-xl hover:bg-blue-700 transition duration-300"
             >
               Cadastrar
             </button>

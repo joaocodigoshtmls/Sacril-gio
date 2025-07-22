@@ -6,7 +6,7 @@ import { auth, provider, signInWithPopup } from "../../firebase";
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,7 +17,6 @@ export default function Login() {
     try {
       const result = await signInWithPopup(auth, provider);
       console.log("Usuário logado com Google:", result.user);
-      // Aqui você pode enviar result.user.uid para seu backend, se quiser
       navigate("/home");
     } catch (error) {
       console.error("Erro no login com Google:", error);
@@ -37,10 +36,13 @@ export default function Login() {
         }),
       });
       const data = await res.json();
+      console.log("LOGIN RESPONSE:", res.status, data);
+
       if (!res.ok) throw new Error(data.error || "Erro no login");
       localStorage.setItem("token", data.token);
       navigate("/home");
     } catch (err) {
+      console.error("Login falhou:", err);
       alert(err.message);
     }
   };
@@ -76,7 +78,6 @@ export default function Login() {
             onClick={handleGoogleLogin}
             className="flex items-center justify-center mt-6 w-full text-blue-600 border border-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition"
           >
-            {/* ...ícone do Google aqui */}
             Sign in with Google
           </button>
 
@@ -88,7 +89,6 @@ export default function Login() {
             <span className="w-1/5 border-b"></span>
           </div>
 
-          {/* Email / Senha */}
           <form onSubmit={handleEmailLogin} className="mt-4 space-y-4">
             <div>
               <label className="block mb-1 text-sm font-medium text-gray-600">
@@ -134,7 +134,6 @@ export default function Login() {
             </button>
           </form>
 
-          {/* Link para cadastro */}
           <div className="flex items-center justify-between mt-6">
             <span className="w-1/5 border-b"></span>
             <Link
