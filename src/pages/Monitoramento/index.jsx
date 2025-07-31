@@ -20,13 +20,13 @@ const Dashboard = () => {
       </div>
 
       <div className="flex justify-center mt-8 gap-4">
-        <button className="bg-blue-800 text-white px-6 py-2 rounded hover:bg-blue-900 transition">
+        <button className="bg-blue-800 text-black px-6 py-2 rounded hover:bg-blue-900 transition">
           ⏺️ Iniciar Gravação
         </button>
-        <button className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition">
+        <button className="bg-red-600 text-black px-6 py-2 rounded hover:bg-red-700 transition">
           ⏹️ Parar Gravação
         </button>
-        <button className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
+        <button className="bg-green-600 text-black px-6 py-2 rounded hover:bg-green-700 transition">
           📁 Ver Arquivos Gravados
         </button>
       </div>

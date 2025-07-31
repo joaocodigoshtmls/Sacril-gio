@@ -10,7 +10,7 @@ export default function MainLayout({ children }) {
         <nav className="flex flex-col space-y-4">
           <Link to="/home" className="hover:text-gray-300">🏠 Home</Link>
           <Link to="/dashboard" className="hover:text-gray-300">📊 Dashboard</Link>
-          <Link to="/alunos" className="hover:text-gray-300">📋 Lista de Alunos</Link>
+          <Link to="/monitoramento" className="hover:text-gray-300">📋 Monitoramento</Link>
           <Link to="/configuracoes" className="hover:text-gray-300">⚙️ Configurações</Link>
         </nav>
       </div>

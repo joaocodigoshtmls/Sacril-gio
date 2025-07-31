@@ -6,30 +6,30 @@ import {
   useLocation
 } from 'react-router-dom';
 
-import Login from './pages/Login';
+import Login from './pages/login';
 import Cadastro from './pages/Cadastro';
 import Home from './pages/Home';
-import Dashboard from './pages/Dashboard/Dashboard';
+import Dashboard from './pages/Dashboard/index'; // <- Nova Dashboard
 import MainLayout from './layout/MainLayout';
 import Configuracoes from './pages/Configuracoes';
+import Monitoramento from './pages/Monitoramento'; // <- Antigo Alunos
 
 function AppContent() {
   const location = useLocation();
-  const isPublicPage = ["/", "/cadastro"].includes(location.pathname);
+  const isPublicPage = ["/", "/cadastro", "/login"].includes(location.pathname);
 
   return (
     <div className="flex min-h-screen">
       {!isPublicPage && <MainLayout />}
       <div className="flex-1 bg-gray-50">
         <Routes>
-          {/* Rota raiz agora carrega o Login */}
           <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} /> {/* Novo Dashboard */}
           <Route path="/configuracoes" element={<Configuracoes />} />
-          {/* opcional: catch‑all */}
-          <Route path="*" element={<div>404 – Página não encontrada</div>} />
+          <Route path="/monitoramento" element={<Monitoramento />} /> {/* Novo Monitoramento */}
         </Routes>
       </div>
     </div>
