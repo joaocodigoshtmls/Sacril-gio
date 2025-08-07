@@ -1,4 +1,3 @@
-// src/pages/Login/index.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, provider, signInWithPopup } from "../../firebase";
@@ -17,6 +16,14 @@ export default function Login() {
     try {
       const result = await signInWithPopup(auth, provider);
       console.log("Usuário logado com Google:", result.user);
+
+      const usuario = {
+        nome: result.user.displayName,
+        email: result.user.email,
+        foto: result.user.photoURL,
+      };
+
+      localStorage.setItem("usuario", JSON.stringify(usuario));
       navigate("/home");
     } catch (error) {
       console.error("Erro no login com Google:", error);
@@ -25,32 +32,43 @@ export default function Login() {
   };
 
   const handleEmailLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-      const data = await res.json();
-      console.log("LOGIN RESPONSE:", res.status, data);
+  e.preventDefault();
+  try {
+    const res = await fetch(`${API_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: formData.email,
+        password: formData.password,
+      }),
+    });
 
-      if (!res.ok) throw new Error(data.error || "Erro no login");
-      localStorage.setItem("token", data.token);
-      navigate("/home");
-    } catch (err) {
-      console.error("Login falhou:", err);
-      alert(err.message);
-    }
-  };
+    const data = await res.json();
+    console.log("LOGIN RESPONSE:", res.status, data);
+
+    if (!res.ok) throw new Error(data.error || "Erro no login");
+
+    localStorage.setItem("token", data.token);
+
+    // Gera dados básicos do usuário localmente
+    const usuario = {
+      email: formData.email,
+      nome: formData.email.split("@")[0],
+    };
+
+    localStorage.setItem("usuario", JSON.stringify(usuario));
+
+    navigate("/home");
+  } catch (err) {
+    console.error("Login falhou:", err);
+    alert(err.message);
+  }
+};
+
 
   return (
     <div className="min-h-screen w-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
-        {/* Imagem do lado esquerdo */}
         <div
           className="hidden lg:block lg:w-1/2 bg-cover"
           style={{
@@ -59,7 +77,6 @@ export default function Login() {
           }}
         />
 
-        {/* Formulário */}
         <div className="w-full lg:w-1/2 p-8">
           <div className="flex justify-center mb-4">
             <img
@@ -73,7 +90,6 @@ export default function Login() {
             Welcome back!
           </p>
 
-          {/* Botão Google */}
           <button
             onClick={handleGoogleLogin}
             className="flex items-center justify-center mt-6 w-full text-blue-600 border border-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition"
@@ -109,10 +125,7 @@ export default function Login() {
                 <label className="block mb-1 text-sm font-medium text-gray-600">
                   Password
                 </label>
-                <a
-                  href="#"
-                  className="text-xs text-blue-600 hover:underline"
-                >
+                <a href="#" className="text-xs text-blue-600 hover:underline">
                   Forgot Password?
                 </a>
               </div>
