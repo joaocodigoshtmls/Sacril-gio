@@ -100,46 +100,156 @@ export default function Login() {
       {/* Container principal */}
       <div className="relative z-10 flex flex-col lg:flex-row w-full max-w-6xl mx-4">
         {/* Lado esquerdo - Imagem/Branding */}
-        <div className="hidden lg:flex lg:w-1/2 bg-white/10 backdrop-blur-md rounded-l-3xl p-12 flex-col justify-center items-center text-white border border-white/20">
-          <div className="text-center">
-            {/* Logo customizado */}
-            <div className="w-28 h-28 mx-auto mb-8 rounded-full flex items-center justify-center shadow-2xl animate-bounce overflow-hidden">
-              <img 
-                src="/facerec-logo.png" 
-                alt="FaceRec Logo" 
-                className="w-full h-full object-cover rounded-full"
-              />
+        <div className="hidden lg:flex lg:w-1/2 bg-white/10 backdrop-blur-md rounded-l-3xl p-12 flex-col justify-center items-center text-white border border-white/20 relative overflow-hidden">
+          {/* Background Pattern Animado */}
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-0 left-0 w-full h-full">
+              {[...Array(50)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute animate-pulse"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    width: `${Math.random() * 3 + 1}px`,
+                    height: `${Math.random() * 3 + 1}px`,
+                    backgroundColor: 'rgba(255,255,255,0.6)',
+                    borderRadius: '50%',
+                    animationDelay: `${Math.random() * 3}s`,
+                    animationDuration: `${Math.random() * 2 + 2}s`
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Formas geométricas decorativas */}
+          <div className="absolute top-10 right-10 w-32 h-32 bg-gradient-to-br from-blue-400/30 to-purple-500/30 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-20 left-10 w-20 h-20 bg-gradient-to-tr from-pink-400/20 to-blue-400/20 rounded-lg rotate-45 animate-bounce" style={{animationDuration: '3s'}}></div>
+          <div className="absolute top-1/4 left-16 w-16 h-16 border-4 border-white/20 rounded-full animate-spin" style={{animationDuration: '8s'}}></div>
+          
+          <div className="relative z-10 text-center max-w-md">
+            {/* Logo com efeitos especiais */}
+            <div className="relative mb-8">
+              <div className="w-40 h-40 mx-auto rounded-full flex items-center justify-center shadow-2xl relative overflow-hidden group">
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-full animate-pulse opacity-75 group-hover:opacity-100 transition-opacity"></div>
+                <div className="absolute inset-2 bg-gradient-to-r from-slate-800 to-slate-900 rounded-full"></div>
+                
+                {/* Logo */}
+                <img 
+                  src="/facerec-logo.png" 
+                  alt="FaceRec Logo" 
+                  className="relative z-10 w-32 h-32 object-cover rounded-full group-hover:scale-110 transition-transform duration-500"
+                />
+                
+                {/* Anel orbital */}
+                <div className="absolute inset-0 border-4 border-white/30 rounded-full animate-spin" style={{animationDuration: '10s'}}></div>
+                <div className="absolute inset-4 border-2 border-white/20 rounded-full animate-spin" style={{animationDuration: '15s', animationDirection: 'reverse'}}></div>
+              </div>
+              
+              {/* Pulse effect */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 border-2 border-white/30 rounded-full animate-ping"></div>
             </div>
             
-            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
-              FaceRec
-            </h1>
-            
-            <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-              Sistema inteligente de reconhecimento facial com tecnologia de ponta
-            </p>
-            
-            {/* Ícones modernos */}
-            <div className="flex justify-center space-x-8">
-              {/* Ícone de Reconhecimento Facial */}
-              <div className="w-14 h-14 bg-blue-500/20 rounded-full flex items-center justify-center backdrop-blur-sm animate-pulse border border-blue-400/30">
-                <svg className="w-7 h-7 text-blue-300" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V9M19 21H5V3H13V9H19V21ZM12 12C10.34 12 9 13.34 9 15C9 16.66 10.34 18 12 18C13.66 18 15 16.66 15 15C15 13.34 13.66 12 12 12Z"/>
-                </svg>
+            {/* Título com efeito de texto */}
+            <div className="mb-8">
+              <h1 className="text-5xl font-bold mb-4 relative">
+                <span className="bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent animate-pulse">
+                  FaceRec
+                </span>
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg opacity-20 blur animate-pulse"></div>
+              </h1>
+              
+              <div className="flex justify-center items-center space-x-2 mb-6">
+                <div className="h-0.5 bg-gradient-to-r from-transparent via-white to-transparent flex-1 max-w-12"></div>
+                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                <div className="h-0.5 bg-gradient-to-r from-transparent via-white to-transparent flex-1 max-w-12"></div>
               </div>
               
-              {/* Ícone de Segurança/Shield */}
-              <div className="w-14 h-14 bg-purple-500/20 rounded-full flex items-center justify-center backdrop-blur-sm animate-pulse border border-purple-400/30" style={{animationDelay: '0.5s'}}>
-                <svg className="w-7 h-7 text-purple-300" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11.5C15.4,11.5 16,12.4 16,13V16C16,17.4 15.4,18 14.8,18H9.2C8.6,18 8,17.4 8,16V13C8,12.4 8.6,11.5 9.2,11.5V10C9.2,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,10V11.5H13.5V10C13.5,8.7 12.8,8.2 12,8.2Z"/>
-                </svg>
+              <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+                <span className="font-light">Sistema inteligente de</span><br/>
+                <span className="font-bold bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                  reconhecimento facial
+                </span><br/>
+                <span className="font-light">com tecnologia de ponta</span>
+              </p>
+            </div>
+            
+            {/* Features com animações */}
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4 group">
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500/30 to-cyan-500/30 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20 group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-cyan-300" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V9M19 21H5V3H13V9H19V21ZM12 12C10.34 12 9 13.34 9 15C9 16.66 10.34 18 12 18C13.66 18 15 16.66 15 15C15 13.34 13.66 12 12 12Z"/>
+                    </svg>
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center animate-pulse">
+                    <span className="text-white text-xs font-bold">✓</span>
+                  </div>
+                </div>
+                <div className="text-left">
+                  <div className="font-bold text-white text-lg">Precisão 95%</div>
+                  <div className="text-blue-200 text-sm">Reconhecimento instantâneo</div>
+                </div>
               </div>
               
-              {/* Ícone de AI/Neural Network */}
-              <div className="w-14 h-14 bg-indigo-500/20 rounded-full flex items-center justify-center backdrop-blur-sm animate-pulse border border-indigo-400/30" style={{animationDelay: '1s'}}>
-                <svg className="w-7 h-7 text-indigo-300" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C13.1 2 14 2.9 14 4S13.1 6 12 6 10 5.1 10 4 10.9 2 12 2M8.5 8.5C9.6 8.5 10.5 9.4 10.5 10.5S9.6 12.5 8.5 12.5 6.5 11.6 6.5 10.5 7.4 8.5 8.5 8.5M15.5 8.5C16.6 8.5 17.5 9.4 17.5 10.5S16.6 12.5 15.5 12.5 13.5 11.6 13.5 10.5 14.4 8.5 15.5 8.5M12 11C13.1 11 14 11.9 14 13S13.1 15 12 15 10 14.1 10 13 10.9 11 12 11M6 15.5C7.1 15.5 8 16.4 8 17.5S7.1 19.5 6 19.5 4 18.6 4 17.5 4.9 15.5 6 15.5M18 15.5C19.1 15.5 20 16.4 20 17.5S19.1 19.5 18 19.5 16 18.6 16 17.5 16.9 15.5 18 15.5M12 18C13.1 18 14 18.9 14 20S13.1 22 12 22 10 21.1 10 20 10.9 18 12 18M12 6.5L8.5 8.5M12 6.5L15.5 8.5M8.5 12.5L12 11M15.5 12.5L12 11M12 15L6 15.5M12 15L18 15.5M12 18L6 19.5M12 18L18 19.5"/>
-                </svg>
+              <div className="flex items-center space-x-4 group">
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-500/30 to-pink-500/30 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20 group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-pink-300" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11.5C15.4,11.5 16,12.4 16,13V16C16,17.4 15.4,18 14.8,18H9.2C8.6,18 8,17.4 8,16V13C8,12.4 8.6,11.5 9.2,11.5V10C9.2,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,10V11.5H13.5V10C13.5,8.7 12.8,8.2 12,8.2Z"/>
+                    </svg>
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center animate-pulse">
+                    <span className="text-white text-xs font-bold">🔒</span>
+                  </div>
+                </div>
+                <div className="text-left">
+                  <div className="font-bold text-white text-lg">100% Seguro</div>
+                  <div className="text-purple-200 text-sm">Criptografia avançada</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-4 group">
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-r from-green-500/30 to-emerald-500/30 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20 group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-emerald-300" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C13.1 2 14 2.9 14 4S13.1 6 12 6 10 5.1 10 4 10.9 2 12 2M8.5 8.5C9.6 8.5 10.5 9.4 10.5 10.5S9.6 12.5 8.5 12.5 6.5 11.6 6.5 10.5 7.4 8.5 8.5 8.5M15.5 8.5C16.6 8.5 17.5 9.4 17.5 10.5S16.6 12.5 15.5 12.5 13.5 11.6 13.5 10.5 14.4 8.5 15.5 8.5M12 11C13.1 11 14 11.9 14 13S13.1 15 12 15 10 14.1 10 13 10.9 11 12 11M6 15.5C7.1 15.5 8 16.4 8 17.5S7.1 19.5 6 19.5 4 18.6 4 17.5 4.9 15.5 6 15.5M18 15.5C19.1 15.5 20 16.4 20 17.5S19.1 19.5 18 19.5 16 18.6 16 17.5 16.9 15.5 18 15.5M12 18C13.1 18 14 18.9 14 20S13.1 22 12 22 10 21.1 10 20 10.9 18 12 18M12 6.5L8.5 8.5M12 6.5L15.5 8.5M8.5 12.5L12 11M15.5 12.5L12 11M12 15L6 15.5M12 15L18 15.5M12 18L6 19.5M12 18L18 19.5"/>
+                    </svg>
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center animate-pulse">
+                    <span className="text-white text-xs font-bold">⚡</span>
+                  </div>
+                </div>
+                <div className="text-left">
+                  <div className="font-bold text-white text-lg">IA Avançada</div>
+                  <div className="text-emerald-200 text-sm">Aprendizado contínuo</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Call to action com animação */}
+            <div className="mt-12 pt-8 border-t border-white/10">
+              <div className="relative">
+                <div className="text-blue-200 text-sm font-medium mb-4">
+                  Junte-se a mais de <span className="text-yellow-300 font-bold">10.000+</span> usuários
+                </div>
+                <div className="flex justify-center space-x-3">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center animate-bounce">
+                    <span className="text-xs">👥</span>
+                  </div>
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center animate-bounce" style={{animationDelay: '0.2s'}}>
+                    <span className="text-xs">🏢</span>
+                  </div>
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center animate-bounce" style={{animationDelay: '0.4s'}}>
+                    <span className="text-xs">🎓</span>
+                  </div>
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center animate-bounce" style={{animationDelay: '0.6s'}}>
+                    <span className="text-xs">🏥</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
