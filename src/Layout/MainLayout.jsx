@@ -1,242 +1,147 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { auth } from '../firebase'; // Ajuste o caminho conforme necessário
+import { auth } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { LayoutDashboard, Home, Monitor, Settings, LogOut, Bell, Search, Camera, Moon, Sun, Shield } from 'lucide-react';
 
 export default function MainLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [usuario, setUsuario] = useState(null);
-  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [dark, setDark] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Monitora autenticação
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUsuario({
-          nome: user.displayName || 'Usuário',
-          email: user.email,
-          foto: user.photoURL
+          nome: user.displayName || user.email?.split('@')[0] || 'Usuário',
+          email: user.email || '',
+          photoURL: user.photoURL || ''
         });
       } else {
-        // Se não estiver logado, verifica localStorage
-        const usuarioLocal = localStorage.getItem('usuario');
-        if (usuarioLocal) {
-          setUsuario(JSON.parse(usuarioLocal));
-        }
+        setUsuario(null);
+        navigate('/login');
       }
     });
-
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      localStorage.removeItem('usuario');
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('token');
-      navigate('/login');
-    } catch (error) {
-      console.error('Erro ao fazer logout:', error);
-    }
+  useEffect(() => {
+    const html = document.documentElement;
+    if (dark) html.classList.add('dark');
+    else html.classList.remove('dark');
+  }, [dark]);
+
+  const signOutUser = async () => {
+    await signOut(auth);
+    navigate('/login');
   };
 
-  const menuItems = [
-    { path: '/home', icon: '🏠', label: 'Home', gradient: 'from-blue-500 to-cyan-500' },
-    { path: '/dashboard', icon: '📊', label: 'Dashboard', gradient: 'from-purple-500 to-pink-500' },
-    { path: '/monitoramento', icon: '📋', label: 'Monitoramento', gradient: 'from-green-500 to-emerald-500' },
-    { path: '/configuracoes', icon: '⚙️', label: 'Configurações', gradient: 'from-orange-500 to-red-500' }
+  const menu = [
+    { to: '/home', label: 'Home', icon: Home },
+    { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/monitoramento', label: 'Monitoramento', icon: Monitor },
+    { to: '/configuracoes', label: 'Configurações', icon: Settings },
   ];
 
-  const isActiveRoute = (path) => location.pathname === path;
+  const isActive = (to) => location.pathname === to;
 
   return (
-    <div className="flex min-h-screen bg-gray-100 relative">
-      {/* Overlay para mobile */}
-      {sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <div className={`
-        fixed lg:static inset-y-0 left-0 z-50 w-72 bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-900 
-        transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 
-        transition-transform duration-300 ease-in-out shadow-2xl
-      `}>
-
-        <div className="relative h-full flex flex-col">
-          {/* Header da Sidebar */}
-          <div className="p-6 border-b border-white/10">
-            <div className="flex items-center justify-between">
-              {/* Logo sem imagem */}
-              <div className="flex items-center space-x-3">
-                <div>
-                  <h1 className="text-2xl font-bold text-white">FaceRec</h1>
-                  <p className="text-xs text-purple-200">Sistema Inteligente</p>
-                </div>
-              </div>
-
-              {/* Botão fechar (mobile) */}
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="lg:hidden text-white/60 hover:text-white transition-colors p-2"
-              >
-                ✕
-              </button>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300">
+      <div className="flex">
+        {/* Sidebar */}
+        <aside className={`fixed z-40 inset-y-0 left-0 w-72 backdrop-blur-md bg-white/60 dark:bg-slate-900/40 border-r border-slate-200/60 dark:border-slate-800/60 shadow-xl shadow-slate-900/5 transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+          <div className="h-20 flex items-center gap-3 px-5">
+            <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-indigo-500 to-fuchsia-500 grid place-items-center text-white shadow-lg shadow-indigo-500/30">
+              <Camera size={22} />
+            </div>
+            <div>
+              <p className="font-semibold tracking-tight">FaceRec • CFTV</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">segurança em tempo real</p>
             </div>
           </div>
 
-          {/* Navegação */}
-          <nav className="flex-1 p-6 space-y-3">
-            <p className="text-xs uppercase tracking-wider text-purple-200 font-semibold mb-4">
-              Navegação
-            </p>
-            
-            {menuItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setSidebarOpen(false)}
-                className={`
-                  group flex items-center space-x-4 p-4 rounded-xl transition-all duration-300
-                  ${isActiveRoute(item.path) 
-                    ? 'bg-white/20 text-white shadow-lg transform scale-105' 
-                    : 'text-purple-100 hover:bg-white/10 hover:text-white hover:transform hover:scale-105'
-                  }
-                `}
-              >
-                <div className={`
-                  w-10 h-10 rounded-lg flex items-center justify-center text-lg transition-all duration-300
-                  ${isActiveRoute(item.path) 
-                    ? `bg-gradient-to-r ${item.gradient} shadow-lg` 
-                    : 'bg-white/10 group-hover:bg-white/20'
-                  }
-                `}>
-                  {item.icon}
-                </div>
-                
-                <div className="flex-1">
-                  <span className="font-semibold text-sm">{item.label}</span>
-                  {isActiveRoute(item.path) && (
-                    <div className="w-full h-0.5 bg-gradient-to-r from-white to-transparent mt-1 rounded-full" />
-                  )}
-                </div>
-
-                {isActiveRoute(item.path) && (
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                )}
-              </Link>
-            ))}
+          <nav className="px-3 mt-2 space-y-1">
+            {menu.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.to);
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setSidebarOpen(false)}
+                  className={`group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
+                    ${active ? 'bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white shadow-lg shadow-indigo-600/30' : 'hover:bg-slate-100/80 dark:hover:bg-slate-800/60'}`}
+                >
+                  <Icon className={`shrink-0 ${active ? 'opacity-100' : 'text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-200'}`} size={20} />
+                  <span className="text-sm font-medium">{item.label}</span>
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* Área do usuário com cor de fundo */}
-          <div className="p-6 border-t border-white/10">
-            <div className="relative">
-              <button
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                className="w-full flex items-center space-x-3 p-4 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all duration-300 group shadow-lg"
-              >
-                <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-lg shadow-lg border-2 border-white/30">
-                  {usuario?.foto ? (
-                    <img src={usuario.foto} alt="Avatar" className="w-full h-full rounded-full object-cover" />
-                  ) : (
-                    usuario?.nome?.charAt(0)?.toUpperCase() || 'U'
-                  )}
+          <div className="absolute bottom-4 inset-x-3">
+            <div className="p-3 rounded-xl bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800/60">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 grid place-items-center text-white">
+                  <Shield size={18} />
                 </div>
-                
-                <div className="flex-1 text-left">
-                  <p className="text-white font-bold text-base">
-                    {usuario?.nome || 'Usuário'}
-                  </p>
-                  <p className="text-blue-100 text-sm">
-                    {usuario?.email || 'usuario@email.com'}
-                  </p>
+                <div className="text-xs">
+                  <p className="font-semibold leading-4">Criptografia ativa</p>
+                  <p className="text-slate-500 dark:text-slate-400 leading-4">TLS 1.3 • 256-bit</p>
                 </div>
-
-                <div className="text-white/80 group-hover:text-white transition-colors">
-                  {showUserMenu ? '▲' : '▼'}
-                </div>
-              </button>
-
-              {/* Menu dropdown do usuário */}
-              {showUserMenu && (
-                <div className="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-in slide-in-from-bottom-2">
-                  <Link
-                    to="/configuracoes"
-                    onClick={() => {
-                      setShowUserMenu(false);
-                      setSidebarOpen(false);
-                    }}
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
-                  >
-                    <span className="text-lg">👤</span>
-                    <span className="font-medium">Minha Conta</span>
-                  </Link>
-                  
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors"
-                  >
-                    <span className="text-lg">🚪</span>
-                    <span className="font-medium">Sair</span>
-                  </button>
-                </div>
-              )}
+              </div>
             </div>
           </div>
+        </aside>
+
+        {/* Main */}
+        <div className="flex-1 lg:ml-72">
+          {/* Topbar */}
+          <header className="sticky top-0 z-30 backdrop-blur-md bg-white/60 dark:bg-slate-900/40 border-b border-slate-200/60 dark:border-slate-800/60">
+            <div className="h-16 px-4 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 rounded-xl hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition">
+                  <span className="i-lucide-menu h-5 w-5 block" />
+                </button>
+                <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800/60">
+                  <Search size={16} className="text-slate-500" />
+                  <input placeholder="Buscar câmeras, eventos..." className="bg-transparent outline-none text-sm w-64 placeholder:text-slate-500" />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button onClick={() => setDark(!dark)} className="p-2 rounded-xl hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition">
+                  {dark ? <Sun size={18} /> : <Moon size={18} />}
+                </button>
+                <button className="relative p-2 rounded-xl hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition">
+                  <Bell size={18} />
+                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-rose-500 text-[10px] grid place-items-center text-white">3</span>
+                </button>
+                {usuario && (
+                  <div className="flex items-center gap-3">
+                    <div className="text-right hidden sm:block">
+                      <p className="text-xs leading-4 text-slate-500 dark:text-slate-400">Autenticado</p>
+                      <p className="text-sm font-medium leading-4">{usuario?.nome}</p>
+                    </div>
+                    <img src={usuario.photoURL || '/vite.svg'} alt="avatar" className="h-9 w-9 rounded-xl ring-2 ring-slate-200/80 dark:ring-slate-800/80" />
+                    <button onClick={signOutUser} className="px-3 py-2 rounded-xl bg-rose-600 text-white text-sm hover:brightness-110 active:translate-y-px transition flex items-center gap-2">
+                      <LogOut size={16} /> Sair
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </header>
+
+          <main className="p-4 sm:p-6 lg:p-8">
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              {children}
+            </div>
+          </main>
         </div>
       </div>
-
-      {/* Conteúdo Principal */}
-      <div className="flex-1 flex flex-col min-h-screen">
-        {/* Header Mobile */}
-        <header className="lg:hidden bg-white shadow-sm border-b p-4 flex items-center justify-between">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-
-          <div className="flex items-center space-x-2">
-            <h1 className="font-bold text-gray-800">FaceRec</h1>
-          </div>
-
-          <div className="w-10" /> {/* Spacer para centralizar o logo */}
-        </header>
-
-        {/* Área de Conteúdo */}
-        <main className="flex-1 p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">
-            {/* Breadcrumb/Header da página */}
-            <div className="mb-8">
-              <div className="flex items-center space-x-2 text-sm text-gray-500 mb-4">
-                <span>FaceRec</span>
-                <span>/</span>
-                <span className="text-gray-800 font-medium capitalize">
-                  {location.pathname.replace('/', '') || 'Home'}
-                </span>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                {children}
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-
-      {/* Floating Action Button (opcional) */}
-      <button className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 flex items-center justify-center z-30">
-        <span className="text-2xl">💬</span>
-      </button>
     </div>
   );
 }
