@@ -7,6 +7,9 @@ import Configuracoes from './pages/Configuracoes';
 import Monitoramento from './pages/Monitoramento';
 import MainLayout from './Layout/MainLayout';
 
+// ⬇️ ADICIONE
+import Camera from './pages/Camera';
+
 function PrivateRoute({ children }) {
   let usuario = null;
 
@@ -54,6 +57,13 @@ function AppRoutes() {
           <Route path="/configuracoes" element={
             <MainLayout>
               <PrivateRoute><Configuracoes /></PrivateRoute>
+            </MainLayout>
+          } />
+
+          {/* ⬇️ NOVA ROTA PRIVADA */}
+          <Route path="/camera" element={
+            <MainLayout>
+              <PrivateRoute><Camera /></PrivateRoute>
             </MainLayout>
           } />
         </>
