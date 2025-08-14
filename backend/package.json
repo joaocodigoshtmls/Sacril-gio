@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "backend",
   "version": "1.0.0",
   "type": "module",
@@ -17,9 +17,7 @@
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.17.1",
-    "mysql2": "^3.14.3",
-    "vite": "^7.1.0"
+    "mysql2": "^3.14.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
